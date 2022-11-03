@@ -7,13 +7,15 @@ const bodyParser = require('body-parser');
 // dotenv PORT data importeren
 const dotenv = require('dotenv');
 dotenv.config();
-// importeren PORT uit .env
 const PORT = process.env.PORT;
 
 // cors
 const cors = require('cors');
-// all domains can use api
-app.use(cors());
+app.use(cors(
+    {
+        origin: 'http://localhost:3006'
+    }
+));
 
 app.use(express.json());
 
