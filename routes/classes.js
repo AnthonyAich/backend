@@ -6,6 +6,58 @@ const prisma = new PrismaClient();
 // het router object uit express gebruiken
 const router = express.Router();
 
+router.get('/getMyClasses', async (req, res) => {
+    try {
+        // inlude attendee ant meeting
+        const classes = await prisma.userClass.findMany({
+            where: {
+                userId: parseInt(req.user.userId),
+            },
+            include: {
+                Class: true,
+                ClassRole: true
+            },
+        });
+
+        //delete class where multiple class.id is same
+        // filter arguments are: (value, index, array)
+        const uniqueClasses = classes.filter((singleClass, index, arrayMyself) =>
+            index === arrayMyself.findIndex((foundClassInArray) => (
+                foundClassInArray.classId === singleClass.classId
+            ))
+        )
+        const classIds = uniqueClasses.map(singleClass => singleClass.classId);
+        const classRoleTeacher = await prisma.classRole.findFirst({
+            where: {
+                name: 'Teacher'
+            },
+            include: {
+                UserClass: {
+                    where: {
+                        classId: {
+                            in: classIds
+                        }
+                    },
+                    include: {
+                        User: true
+                    }
+                }
+            }
+        });
+        classRoleTeacher.UserClass.forEach(userClass => {
+            uniqueClasses.forEach(singleClass => {
+                if (singleClass.classId === userClass.classId) {
+                    singleClass.teacher = userClass.User;
+                }
+            });
+        });
+
+
+        res.status(200).json(uniqueClasses);
+    } catch (error) {
+        res.status(500).json("internal server error - getMyMeetings");
+    }
+});
 // get all classes
 router.get('/getAll', async (req, res) => {
     try {
@@ -74,6 +126,28 @@ router.post('/add', async (req, res) => {
             },
         });
         res.json(classAdded);
+    } catch (error) {
+        res.json(error);
+    }
+});
+
+//getClassById
+router.get('/getById/:id', async (req, res) => {
+    try {
+        const classById = await prisma.class.findFirst({
+            where: {
+                id: parseInt(req.params.id)
+            },
+            include: {
+                UserClass: {
+                    include: {
+                        User: true,
+                        ClassRole: true
+                    }
+                }
+            }
+        });
+        res.json(classById);
     } catch (error) {
         res.json(error);
     }

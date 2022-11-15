@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Einde meeting</title>
+    <!-- meta tag om de knop sluiten te kunnen gebruiken (Content Security Policy directive) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+    <link rel="stylesheet" href="http://192.168.0.196:9000/public/styles.css">
+    <style>
+        body {
+            background-color: #fff5ed;
+            height: 100vh;
+        }
+        .end-call {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 90%;
+        }
+        header {
+            text-align: left;
+            padding: 0 50px;
+            padding-top: 2rem;
+            font-size: 1rem;
+            height: 10%;
+        }
+        .end-call h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .end-call button {
+            padding: 1rem 2rem;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            background-color: #242423;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>anthoMeet</h1>
+    </header>
+    <div class="end-call">
+        <h1>De meeting is afgelopen</h1>
+        <button onclick="window.close()">Pagina sluiten</button>
+    </div>
+    
+</body>
+</html>

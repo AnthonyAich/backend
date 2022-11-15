@@ -17,14 +17,24 @@ router.post('/', async (req, res) => {
                 password: req.body.password,
             },
         });
-
         if (user) {
-            const accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '4h' });
-            console.log(accessToken);
-            res.status(200).json(accessToken);
+            const userId = user.id;
+            const accessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '4h' });
+            res.cookie('token', accessToken, { httpOnly: true, maxAge: 28800000, secure: false });
+            res.status(200).json(user);
         } else {
             res.status(404).json({ error: 'User not found' });
         }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// logout post
+router.post('/logout', async (req, res) => {
+    try {
+        res.clearCookie('token');
+        res.json({ message: 'Logged out' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

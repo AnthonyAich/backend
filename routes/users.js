@@ -10,7 +10,7 @@ const router = express.Router();
 router.get('/getAll', async (req, res) => {
     try {
         const users = await prisma.user.findMany();
-        res.json(users);
+        res.status(200).json(users);
     }
     catch (error) {
         res.status(500).json({ error: error.message });
@@ -18,15 +18,15 @@ router.get('/getAll', async (req, res) => {
 });
 
 // search user find first
-router.get('/search', async (req, res) => {
+router.post('/search', async (req, res) => {
     try {
         const users = await prisma.user.findMany({
             take: 5,
             where: {
                 OR: [
-                    { firstName: { contains: req.query.q } },
-                    { lastName: { contains: req.query.q } },
-                    { email: { contains: req.query.q } },
+                    { firstName: { contains: req.body.username } },
+                    { lastName: { contains: req.body.username } },
+                    { email: { contains: req.body.username } },
                 ],
             },
         });
@@ -37,17 +37,44 @@ router.get('/search', async (req, res) => {
 
 });
 
+//get myself
+router.get('/getMyself', async (req, res) => {
+    try {
+        const user = await prisma.user.findFirst({
+            where: {
+                id: req.user.userId,
+            },
+        });
+        res.status(200).json(user);
+    }
+    catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // post route update user by id
-router.post('/update/:id', async (req, res) => {
+router.post('/update/', async (req, res) => {
     try {
         const user = await prisma.user.update({
-            where: { id: parseInt(req.params.id) },
+            where: { id: parseInt(req.body.id) },
             data: {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                 email: req.body.email,
                 password: req.body.password,
             },
+        });
+        res.json(user);
+    } catch (error) {
+        res.json(error);
+    }
+});
+
+//get user by id
+router.get('/:id', async (req, res) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: parseInt(req.params.id) },
         });
         res.json(user);
     } catch (error) {
@@ -73,7 +100,7 @@ router.post('/add', async (req, res) => {
 });
 
 // delete user by id
-router.delete('/delete/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
         const user = await prisma.user.delete({
             where: { id: parseInt(req.params.id) },

@@ -88,21 +88,29 @@ model Author {
   User    User    @relation(fields: [userId], references: [id])
 }
 
-model MeetUp {
+model Meeting {
   id       Int     @id @default(autoincrement())
   name     String
   description String
-  meetupTime     DateTime
+  meetingTime     DateTime
   spots   Int
   Attendee Attendee[]
+  Room Room[]
 }
 
 model Attendee {
   id       Int     @id @default(autoincrement())
   userId   Int
   User     User    @relation(fields: [userId], references: [id])
-  meetupId Int
-  MeetUp   MeetUp  @relation(fields: [meetupId], references: [id])
+  meetingId Int
+  Meeting   Meeting  @relation(fields: [meetingId], references: [id])
   roleId   Int
   ClassRole     ClassRole    @relation(fields: [roleId], references: [id])
+}
+
+model Room {
+  id       Int     @id @default(autoincrement())
+  roomId     String
+  meetingId Int
+  Meeting   Meeting  @relation(fields: [meetingId], references: [id])
 }

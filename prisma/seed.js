@@ -1,5 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const { v4: uuidv4 } = require('uuid');
+
 
 async function main() {
     // roles
@@ -31,7 +33,7 @@ async function main() {
             firstName: 'Anthony',
             lastName: 'Aichouche',
             password: '123456',
-            roleId: 1,
+            roleId: adminRole.id,
         }
     });
 
@@ -44,7 +46,7 @@ async function main() {
             firstName: 'Claude',
             lastName: 'Monet',
             password: '123456',
-            roleId: 2,
+            roleId: userRole.id,
         }
     });
 
@@ -59,7 +61,7 @@ async function main() {
             firstName: 'Vincent',
             lastName: 'Van Gogh',
             password: '123456',
-            roleId: 2,
+            roleId: userRole.id,
         }
     });
 
@@ -74,7 +76,7 @@ async function main() {
             firstName: 'Frida',
             lastName: 'Khalo',
             password: '123456',
-            roleId: 2,
+            roleId: userRole.id,
         }
     });
 
@@ -89,7 +91,7 @@ async function main() {
             firstName: 'Pablo',
             lastName: 'Picasso',
             password: '123456',
-            roleId: 2,
+            roleId: userRole.id,
         }
     });
 
@@ -104,7 +106,7 @@ async function main() {
             firstName: 'Salvador',
             lastName: 'Dalí',
             password: '123456',
-            roleId: 2,
+            roleId: userRole.id,
         }
     });
 
@@ -119,7 +121,7 @@ async function main() {
             firstName: 'Daniel',
             lastName: 'Craig',
             password: '123456',
-            roleId: 2,
+            roleId: userRole.id,
         }
     });
 
@@ -134,7 +136,7 @@ async function main() {
             firstName: 'Anna',
             lastName: 'De Armas',
             password: '123456',
-            roleId: 2,
+            roleId: userRole.id,
         }
     });
 
@@ -149,7 +151,7 @@ async function main() {
             firstName: 'Rami',
             lastName: 'Malek',
             password: '123456',
-            roleId: 2,
+            roleId: userRole.id,
         }
     });
 
@@ -164,7 +166,7 @@ async function main() {
             firstName: 'Lea',
             lastName: 'Seydoux',
             password: '123456',
-            roleId: 2,
+            roleId: userRole.id,
         }
     });
 
@@ -179,7 +181,7 @@ async function main() {
             firstName: 'Leonardo',
             lastName: 'Da Vinci',
             password: '123456',
-            roleId: 2,
+            roleId: userRole.id,
         }
     });
 
@@ -194,7 +196,7 @@ async function main() {
             firstName: 'Noam',
             lastName: 'Chomsky',
             password: '123456',
-            roleId: 2,
+            roleId: userRole.id,
         }
     });
 
@@ -209,7 +211,7 @@ async function main() {
             firstName: 'Michel',
             lastName: 'Foucault',
             password: '123456',
-            roleId: 2,
+            roleId: userRole.id,
         }
     });
 
@@ -428,6 +430,28 @@ async function main() {
         }
     });
 
+    const anthonyTeacher = await prisma.userClass.upsert({
+        where: { id: 11 },
+        update: {},
+        create: {
+            id: 11,
+            userId: anthony.id,
+            classId: developerClass.id,
+            roleId: teacherRole.id,
+        }
+    });
+
+    const anthonyStudent = await prisma.userClass.upsert({
+        where: { id: 12 },
+        update: {},
+        create: {
+            id: 12,
+            userId: anthony.id,
+            classId: artistClass.id,
+            roleId: studentRole.id,
+        }
+    });
+
     // Module
     const gitHubModuleWatIsHet = await prisma.module.upsert({
         where: { id: 1 },
@@ -548,15 +572,120 @@ async function main() {
         }
     });
 
+    //meeting
+    const meetingGitHub = await prisma.meeting.upsert({
+        where: { id: 1 },
+        update: {},
+        create: {
+            id: 1,
+            name: 'GitHub meeting',
+            description: 'In deze meeting gaan we praten over GitHub',
+            meetingTime: new Date('2021-05-01T09:00:00'),
+            spots: 15,
+        }
+    });
+
+    const meetingSfumato = await prisma.meeting.upsert({
+        where: { id: 2 },
+        update: {},
+        create: {
+            id: 2,
+            name: 'Sfumato meeting',
+            description: 'In deze meeting gaan we praten over Sfumato',
+            meetingTime: new Date('2021-05-01T09:00:00'),
+            spots: 10,
+        }
+    });
+
+    // attendee
+    const attendeeGitHub = await prisma.attendee.upsert({
+        where: { id: 1 },
+        update: {},
+        create: {
+            id: 1,
+            userId: anthony.id,
+            meetingId: meetingGitHub.id,
+            roleId: teacherRole.id,
+        }
+    });
+
+    const attendeeSfumato = await prisma.attendee.upsert({
+        where: { id: 2 },
+        update: {},
+        create: {
+            id: 2,
+            userId: leonardo.id,
+            meetingId: meetingSfumato.id,
+            roleId: teacherRole.id,
+        }
+    });
+
+    const attendeeSfumatoClaude = await prisma.attendee.upsert({
+        where: { id: 3 },
+        update: {},
+        create: {
+            id: 3,
+            userId: claude.id,
+            meetingId: meetingSfumato.id,
+            roleId: studentRole.id,
+        }
+    });
+
+    const attendeeSfumatoVincent = await prisma.attendee.upsert({
+        where: { id: 4 },
+        update: {},
+        create: {
+            id: 4,
+            userId: vincent.id,
+            meetingId: meetingSfumato.id,
+            roleId: studentRole.id,
+        }
+    });
+
+    const attendeeSfumatoAnthony = await prisma.attendee.upsert({
+        where: { id: 5 },
+        update: {},
+        create: {
+            id: 5,
+            userId: anthony.id,
+            meetingId: meetingSfumato.id,
+            roleId: studentRole.id,
+        }
+    });
+
+    //room
+    const roomSfumato = await prisma.room.upsert({
+        where: { id: 1 },
+        update: {},
+        create: {
+            id: 1,
+            roomId: uuidv4(),
+            meetingId: meetingSfumato.id,
+        }
+    });
+
+    const roomGitHub = await prisma.room.upsert({
+        where: { id: 2 },
+        update: {},
+        create: {
+            id: 2,
+            roomId: uuidv4(),
+            meetingId: meetingGitHub.id,
+        }
+    });
+
     console.log({
         anthony, claude, vincent, frida, pablo, salvador, danielCraig, annaDeArmas, ramiMalek, leaSeydoux, leonardo, noam, michel,
         studentRole, teacherRole, adminRole, userRole,
         gitHubCursus, htmlCursus, sfumatoCursus, onHumanNature, leonardoTechnischTekenen,
         gitHubModuleWatIsHet, gitHubModuleHoeWerktHet, htmlModuleWatIsHet, htmlModuleHoeWerktHet, sfumatoWatIsHet, sfumatoHoeSchilderJeHet,
         artistClass, actorClass, developerClass,
-        anthonyDevStudent, claudeArtStudent, vincentArtStudent, fridaArtTeacher, pabloArtStudent, salvadorArtStudent, danielActorStudent, annaActorStudent, ramiActorStudent, leaActorTeacher,
+        anthonyDevStudent, claudeArtStudent, vincentArtStudent, fridaArtTeacher, pabloArtStudent, salvadorArtStudent, danielActorStudent, annaActorStudent, ramiActorStudent, leaActorTeacher, anthonyTeacher,
         artistClassSfumato,
-        anthonyAuthor, leonardoAuthor, noamAuthor, michelAuthor
+        anthonyAuthor, leonardoAuthor, noamAuthor, michelAuthor,
+        meetingGitHub, meetingSfumato,
+        attendeeGitHub, attendeeSfumato, attendeeSfumatoClaude, attendeeSfumatoVincent, attendeeSfumatoAnthony,
+        roomSfumato, roomGitHub
     });
 }
 main()
