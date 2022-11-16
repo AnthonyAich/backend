@@ -8,149 +8,36 @@
     <title>document basis javascript
     </title>
     <style>
-:root {
-  --border: rgb(3, 169, 244);
-  
-  --g1: rgb(98, 0, 234);
-  --g2: rgb(236, 64, 122);
-  --g3: rgb(253, 216, 53);
-}
-
-body {
-  background-color: rgb(10, 10, 10);
-  display: grid;
-  height: 100vh;
-  margin: 0px;
-  padding: 0px;
-  place-items: center;
-}
-
-.card {
-  aspect-ratio: 1 / 1.6;
-  border: 0.5vmin solid var(--border);
-  cursor: pointer;
-  position: relative;
-  width: 56vmin;
-}
-
-.card:hover:before {
-  background-position: 100% 100%;
-  transform: scale(1.08, 1.03);
-}
-
-.card:hover > .card-content {
-  background-position: -10% 0%;
-}
-
-.card:hover > .card-icon {
-  color: white; 
-}
-
-.card:hover > .card-content > .card-subtitle > .card-subtitle-word {  
-  opacity: 1;
-  transform: translateY(0%);
-  transition: opacity 0ms, transform 200ms cubic-bezier(.90, .06, .15, .90);
-}
-
-.card:before {
-  background: linear-gradient(
-    130deg, 
-    transparent 0% 33%, 
-    var(--g1) 66%, 
-    var(--g2) 83.5%, 
-    var(--g3) 100%
-  );
-  background-position: 0% 0%;
-  background-size: 300% 300%;
-  content: "";
-  height: 100%;
-  left: 0px;
-  pointer-events: none;
-  position: absolute;
-  top: 0px;
-  transition: background-position 350ms ease, transform 350ms ease;
-  width: 100%;
-  z-index: 1;
-}
-
-.card-content {
-  background-image: radial-gradient(
-    rgba(255, 255, 255, 0.2) 8%, 
-    transparent 8%
-  );
-  background-position: 0% 0%;
-  background-size: 5vmin 5vmin;
-  height: calc(100% - 10vmin);
-  padding: 5vmin;
-  position: relative;
-  transition: background-position 350ms ease;
-  width: calc(100% - 10vmin);
-  z-index: 2;
-}
-
-.card-title,
-.card-subtitle {
-  color: white;
-  font-family: "Anek Latin", sans-serif;
-  font-weight: 400;
-  margin: 0px;
-}
-
-.card-title {
-  font-size: 6vmin;
-}
-
-.card-subtitle {
-  font-size: 3vmin;
-  margin-top: 2vmin;
-}
-
-.card-subtitle-word {
-  display: inline-block;
-  margin: 0vmin 0.3vmin;
-  opacity: 0;
-  position: relative;  
-  transform: translateY(40%);
-  transition: none;
-}
-
-.card-icon {
-  bottom: 0px;
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 7vmin;
-  left: 0px;
-  margin: 5vmin;
-  position: absolute;
-  transition: color 250ms ease;
-  z-index: 2;
-}
+      body {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+        .loading {
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500' fill='none'%3E%3Cg id='Group 85'%3E%3Cpath id='Ellipse 19' d='M111.043 82.367C99.6717 68.6494 101.483 48.1083 116.55 38.5973C147.17 19.2678 181.74 6.75015 217.906 2.0686C264.778 -3.9989 312.411 3.34488 355.279 23.2483C398.147 43.1518 434.496 74.7995 460.108 114.521C485.721 154.243 499.549 200.412 499.989 247.673C500.429 294.935 487.463 341.353 462.594 381.545C437.724 421.736 401.972 454.055 359.481 474.753C316.991 495.451 269.503 503.68 222.526 498.486C186.28 494.478 151.482 482.606 120.508 463.85C105.266 454.621 103.073 434.117 114.187 420.19C125.3 406.264 145.506 404.273 161.146 412.808C182.259 424.331 205.506 431.687 229.617 434.353C264.47 438.207 299.701 432.102 331.225 416.746C362.749 401.39 389.274 377.412 407.724 347.594C426.175 317.775 435.795 283.338 435.469 248.274C435.142 213.21 424.883 178.957 405.881 149.488C386.878 120.018 359.912 96.538 328.107 81.7715C296.303 67.005 260.964 61.5566 226.189 66.0581C202.132 69.1723 179.026 76.9601 158.131 88.8738C142.652 97.6991 122.414 96.0845 111.043 82.367Z' fill='%234CA2D5'/%3E%3Cpath id='Ellipse 20' d='M103.799 413.382C92.4726 426.039 72.8611 427.23 61.6889 414.435C45.8376 396.282 32.6584 375.891 22.6005 353.872C8.27222 322.505 0.588509 288.512 0.0324966 254.031C-0.523515 219.55 6.06019 185.327 19.3697 153.513C28.7124 131.182 41.2273 110.376 56.485 91.7219C67.2389 78.5739 86.8786 79.1311 98.6076 91.4172V91.4172C110.337 103.703 109.644 123.048 99.4261 136.617C90.0199 149.109 82.1806 162.754 76.1148 177.253C66.08 201.239 61.1162 227.042 61.5354 253.039C61.9546 279.036 67.7478 304.665 78.5507 328.315C85.0808 342.611 93.356 355.997 103.16 368.179C113.81 381.411 115.126 400.724 103.799 413.382V413.382Z' fill='%23556D7B'/%3E%3C/g%3E%3C/svg%3E");
+          background-position: center;
+          background-repeat: no-repeat;
+          width: 100px;
+          height: 100px;
+          display: block;
+          animation: spin 1s linear infinite;
+          margin: auto auto;
+        }
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
     </style>
 </head>
 
 <body>
-<div class="card">
-  <div class="card-content">
-    <h3 class="card-title">I know exactly what I'm doing</h3>
-    <h4 class="card-subtitle"></h4>
-  </div>
-  <i class="fa-solid fa-hat-witch card-icon"></i>
-</div>
-    <script>
-    //onhover card, displaying the subtitle word per word
-    const subtitle = document.getElementsByClassName("card-subtitle")[0];
-
-    const createWord = (text, index) => {
-        const word = document.createElement("span");
-        word.innerHTML = `${text} `;
-        word.classList.add("card-subtitle-word");
-        word.style.transitionDelay = `${index * 40}ms`;
-  
-        return word;
-    }
-    const addWord = (text, index) => subtitle.appendChild(createWord(text, index));
-    const createSubtitle = text => text.split(" ").map(addWord);
-    createSubtitle("But in a much more real sense, I have no idea what I'm doing.");
-    </script>
+  <div class="loading"></div>
 </body>
 
 </html>
