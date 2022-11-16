@@ -28,7 +28,7 @@ app.use(cookieParser());
 const cors = require('cors');
 app.use(cors(
     {
-        origin: 'http://192.168.0.196:3000',
+        origin: '*',
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         credentials: true,
         //allow all headers
