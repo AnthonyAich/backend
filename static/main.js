@@ -10,7 +10,7 @@ myVideo.muted = true;
 let peer = new Peer(undefined, {
     path: "/peerjs",
     host: "/",
-    port: "",
+    port: "9000",
 });
 
 let myVideoStream;
@@ -115,7 +115,7 @@ const cancel = () => {
 
 const copy = async () => {
     const roomid = document.getElementById("roomid").innerText;
-    await navigator.clipboard.writeText("https://web3node.herokuapp.com/join/" + roomid);
+    await navigator.clipboard.writeText("https://web3node.herokuapp.com:9000/join/" + roomid);
 };
 
 const invitebox = () => {
