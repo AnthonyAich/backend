@@ -77,6 +77,6 @@ io.on("connection", (socket) => {
     });
 });
 
-server.listen(9000, () => {
-    console.log('🚀 Server running on port ' + 9000);
+server.listen(PORT, () => {
+    console.log('🚀 Server running on port ' + PORT);
 });
