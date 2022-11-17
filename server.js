@@ -28,7 +28,7 @@ app.use(cookieParser());
 const cors = require('cors');
 app.use(cors(
     {
-        origin: ['https://cuddly-trains-mate-195-62-90-242.loca.lt', 'http://localhost:3000'],
+        origin: ['https://cuddly-trains-mate-195-62-90-242.loca.lt', 'http://localhost:3000', 'https://web3node.herokuapp.com'],
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         credentials: true,
         //allow all headers

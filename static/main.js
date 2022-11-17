@@ -115,7 +115,7 @@ const cancel = () => {
 
 const copy = async () => {
     const roomid = document.getElementById("roomid").innerText;
-    await navigator.clipboard.writeText("https://web3node.herokuapp.com:9000/join/" + roomid);
+    await navigator.clipboard.writeText("https://web3node.herokuapp.com/join/" + roomid);
 };
 
 const invitebox = () => {
