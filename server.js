@@ -28,7 +28,7 @@ app.use(cookieParser());
 const cors = require('cors');
 app.use(cors(
     {
-        origin: '*',
+        origin: ['https://cuddly-trains-mate-195-62-90-242.loca.lt', "localhost:3000"],
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         credentials: true,
         //allow all headers
