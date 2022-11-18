@@ -32,9 +32,10 @@ app.use(cors(
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         credentials: true,
         //allow all headers
-        allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin', 'Access-Control-Allow-Credentials'],
+        allowedHeaders: '*',
     }
 ));
+
 app.use(helmet());
 
 app.use(express.json());
