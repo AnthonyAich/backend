@@ -31,8 +31,8 @@ app.use(cors(
         origin: ['https://cuddly-trains-mate-195-62-90-242.loca.lt', 'http://localhost:3000', 'https://web3node.herokuapp.com'],
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         credentials: true,
-        //allow all headers
-        allowedHeaders: '*',
+        //allow all headers and the cookie
+        allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin', 'Access-Control-Allow-Credentials', 'Access-Control-Allow-Origin', 'Access-Control-Allow-Methods', 'Access-Control-Allow-Headers', 'Set-Cookie'],
     }
 ));
 
