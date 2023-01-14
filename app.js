@@ -15,6 +15,7 @@ const cors = require('cors');
 app.use(cors({
     origin: ['http://localhost:3001', 'https://volgsysteem.anthonyaichouche.be'],
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'X-Requested-With', 'Accept', 'cookie'],
 }));
 app.use(express.json());
 
