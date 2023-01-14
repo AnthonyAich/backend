@@ -9,8 +9,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // dotenv PORT data importeren
 const dotenv = require('dotenv');
 dotenv.config();
-const PORT = process.env.PORT;
-
+// const PORT = process.env.PORT;
+const port = config.get('port');
 // cors
 const cors = require('cors');
 app.use(cors({
@@ -35,6 +35,6 @@ const routes = require('./routes');
 app.use('/', routes);
 
 // port 3000
-app.listen(PORT, () => {
-    console.log('🚀 Server running on port ' + PORT);
+app.listen(port, () => {
+    console.log('🚀 Server running on port ' + port);
 });
