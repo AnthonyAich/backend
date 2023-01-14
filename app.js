@@ -10,6 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const dotenv = require('dotenv');
 dotenv.config();
 // const PORT = process.env.PORT;
+const config = require('./config');
 const port = config.get('port');
 // cors
 const cors = require('cors');
