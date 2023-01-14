@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  id    String    @id
+  code String
+  gebruikersNaam String
+  familieNaam String
+  voorNaam String
+  sorteerNaam String
+  email String
+  aanmaakDatum DateTime
+  geldig Int
+  role String
+  rapporten Rapport[]
+  groepStudenten GroepStudent[]
+}
+
+model GroepStudent {
+  id   String    @id
+  groepId String
+  groep Groep @relation(fields: [groepId], references: [id])
+  studentId String
+  student Student @relation(fields: [studentId], references: [id])
+  aanmaakDatum DateTime
+  geldig Int
+}
+
+model Groep {
+  id    String    @id
+  naam String
+  aanmaakDatum DateTime
+  geldig Int
+  groepStudenten GroepStudent[]
+  opdrachten Opdracht[]
+}
+
+model Rapport {
+  id    String    @id
+  status Int
+  extraMinuten Int
+  aanmaakDatum DateTime
+  geldig Int
+  studentId String
+  student Student @relation(fields: [studentId], references: [id])
+  OpdrachtElementId String
+  opdrachtElement OpdrachtElement @relation(fields: [OpdrachtElementId], references: [id])
+  VraagStudent VraagStudent[]
+}
+
+model VraagStudent {
+  id    String    @id
+  beschrijving String
+  aanmaakDatum DateTime
+  geldig Int
+  rapportId String
+  rapport Rapport @relation(fields: [rapportId], references: [id])
+}
+
+model OpdrachtElement {
+  id   String    @id
+  beschrijving String
+  minuten DateTime
+  aanmaakDatum DateTime
+  geldig Int
+  opdrachtId String
+  opdracht Opdracht @relation(fields: [opdrachtId], references: [id])
+  Rapport Rapport[]
+}
+
+model Opdracht {
+  id    String    @id
+  naam String
+  aanmaakDatum DateTime
+  geldig Int
+  opdrachtElementen OpdrachtElement[]
+  groepId String
+  groep Groep @relation(fields: [groepId], references: [id])
+}
