@@ -34,7 +34,7 @@ app.use(express.json());
 const authenticate = require('./middleware/authenticate');
 app.use((req, res, next) => {
     // if res is login or logout
-    if (req.path === '/login' || req.path === '/login/logout') {
+    if (req.path === '/login' || req.path === '/login/logout' || req.path === '/login/register') {
         next();
     } else {
         authenticate(req, res, next);
