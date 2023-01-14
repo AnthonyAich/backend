@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 let authenticate = (req, res, next) => {
     if (!((req.headers.cookie))) {
-        res.status(200).send("Unauthorized");
+        res.status(200).send("Unauthorized no cookie");
         console.log('no cookie');
     } else {
         const token = (req.headers.cookie).split('=')[1];
@@ -10,7 +10,8 @@ let authenticate = (req, res, next) => {
             // if exists
             if (error) {
                 if (error.message === 'jwt expired') {
-                    res.status(200).send("Unauthorized");
+                    res.status(200).send("Unauthorized with cookie expired");
+                    console.log('cookie: ', req.headers.cookie);
                     console.log('Error in Auth: ', error.message);
                 }
             } else {
