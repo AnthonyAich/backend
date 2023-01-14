@@ -15,8 +15,19 @@ const cors = require('cors');
 app.use(cors({
     origin: ['http://localhost:3001', 'https://volgsysteem.anthonyaichouche.be'],
     credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'X-Requested-With', 'Accept', 'cookie'],
 }));
+
+app.use(function (req, res, next) {
+    var allowedOrigins = ['http://localhost:3001', 'https://volgsysteem.anthonyaichouche.be'];
+    var origin = req.headers.origin;
+    if (allowedOrigins.indexOf(origin) > -1) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    res.header("Access-Control-Allow-Credentials", true);
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 app.use(express.json());
 
 //middleware
