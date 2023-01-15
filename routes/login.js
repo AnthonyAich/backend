@@ -32,7 +32,7 @@ router.post('/', [
             const validPassword = await bcrypt.compare(req.body.password, user.code);
             if (validPassword) {
                 const accessToken = jwt.sign({ studentId, userRole }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '6h' });
-                res.cookie('token', accessToken, { httpOnly: true, maxAge: 28800000, secure: false, SameSite: 'None' });
+                res.cookie('token', accessToken, { httpOnly: true, maxAge: 28800000, secure: true, SameSite: 'None' });
                 res.status(200).json(user);
             } else {
                 res.status(401).json({ error: 'Invalid password' });
@@ -123,7 +123,7 @@ router.post('/register', [
 
             const { id: studentId, role: userRole } = newUser;
             const accessToken = jwt.sign({ studentId, userRole }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '6h' });
-            res.cookie('token', accessToken, { httpOnly: true, maxAge: 28800000, secure: false, SameSite: 'None' });
+            res.cookie('token', accessToken, { httpOnly: true, maxAge: 28800000, secure: true, SameSite: 'None' });
             res.status(200).json(newUser);
         }
     } catch (error) {
