@@ -13,12 +13,12 @@ const PORT = process.env.PORT;
 // cors
 const cors = require('cors');
 app.use(cors({
-    origin: ['http://localhost:3001', 'https://volgsysteem.anthonyaichouche.be'],
+    origin: ['http://localhost:3001', 'https://www.anthonyaichouche.be'],
     credentials: true,
 }));
 
 app.use(function (req, res, next) {
-    var allowedOrigins = ['http://localhost:3001', 'https://volgsysteem.anthonyaichouche.be'];
+    var allowedOrigins = ['http://localhost:3001', 'https://www.anthonyaichouche.be'];
     var origin = req.headers.origin;
     if (allowedOrigins.indexOf(origin) > -1) {
         res.setHeader('Access-Control-Allow-Origin', origin);
