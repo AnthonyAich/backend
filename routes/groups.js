@@ -19,13 +19,50 @@ router.get('/getMyGroups', [
         const userId = req.student.studentId;
         const groups = await prisma.groepStudent.findMany({
             where: {
-                studentId: '5e5d5b5e-b564-4e64-a56e-7fbbb6fd8e1a',
+                studentId: userId,
                 geldig: 1
             },
             include: {
                 groep: 1
             }
         });
+        console.log("groups: ", groups);
+
+        // get amount of opdrachtElementen per groep
+        const opdrachtElementenPerGroep = await prisma.opdracht.findMany({
+            where: {
+                groepId: {
+                    in: groups.map(groep => groep.groepId)
+                }
+            },
+            select: {
+                groepId: true,
+                // where geldig = 1
+                opdrachtElementen: {
+                    where: {
+                        geldig: 1
+
+                    }
+                }
+            }
+        });
+
+        // count the amount of opdrachtElementen per groep
+        opdrachtElementenPerGroep.forEach(groep => {
+            groep.opdrachtElementen = groep.opdrachtElementen.length;
+        });
+
+        // add the amount of opdrachtElementen to the groep if amount is > 0 or set to 0
+        groups.forEach(groep => {
+            const opdrachtElementen = opdrachtElementenPerGroep.find(opdracht => opdracht.groepId === groep.groepId);
+            groep.groep.opdrachtElementen = opdrachtElementen ? opdrachtElementen.opdrachtElementen : 0;
+        });
+
+        console.log("groep met aantal: ", groups);
+
+        console.log("elementen: ", opdrachtElementenPerGroep);
+
+
         //checken als groepen geldig zijn
         const geldigGroepen = groups.filter(groep => groep.groep.geldig === 1);
 
@@ -265,6 +302,38 @@ router.get('/getById/:id', async (req, res) => {
             },
         });
         res.json(groupById);
+    } catch (error) {
+        res.json(error);
+    }
+});
+
+// searchGroepByName {name} post
+router.post('/searchGroepByName', [
+    check('name').not().isEmpty().withMessage('Group name id is required'),
+], async (req, res) => {
+    try {
+        const userId = req.student.studentId;
+        const groupStudents = await prisma.groepStudent.findMany({
+            where: {
+                studentId: userId,
+                geldig: 1,
+
+            },
+        });
+
+        const groups = await prisma.groep.findMany({
+            where: {
+                naam: {
+                    contains: req.body.name,
+                },
+                geldig: 1,
+                id: {
+                    in: groupStudents.map(groupStudent => groupStudent.groepId),
+                },
+            },
+        });
+
+        res.json(groups);
     } catch (error) {
         res.json(error);
     }

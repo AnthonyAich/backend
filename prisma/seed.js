@@ -259,27 +259,6 @@ async function main() {
         }
     });
 
-    //     model OpdrachtElement {
-    //   id   String @id
-    //   beschrijving String
-    //   minuten Int
-    //   aanmaakDatum DateTime
-    //   geldig Int
-    //   opdrachtId String
-    //   opdracht Opdracht @relation(fields: [opdrachtId], references: [id])
-    //   Rappot Rappot[]
-    //     }
-
-    // model Opdracht {
-    //   id    String @id
-    //   naam String
-    //   aanmaakDatum DateTime
-    //   geldig Int
-    //   opdrachtElementen OpdrachtElement[]
-    //   groepId String
-    //   groep Groep @relation(fields: [groepId], references: [id])
-    //     }
-
     // opdracht aanmaken "Basis reactOpdracht"
     const basisReactOpdracht = await prisma.opdracht.upsert({
         where: {

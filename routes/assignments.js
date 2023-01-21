@@ -8,6 +8,19 @@ const crypto = require('crypto');
 // het router object uit express gebruiken
 const router = express.Router();
 
+// minuted
+function addMinutes(date, minutes) {
+    const dateCopy = new Date(date.getTime());
+    dateCopy.setMinutes(dateCopy.getMinutes() + parseInt(minutes));
+
+    if (minutes < 0) {
+        while (dateCopy < date) {
+            dateCopy.setMinutes(dateCopy.getMinutes() + parseInt(minutes));
+        }
+    }
+
+    return dateCopy;
+}
 
 // get all opdrachten where groepId = :id ans get all deelOpdrachten
 router.get('/getOpdrachtenByGroepId/:id', [
@@ -72,6 +85,8 @@ router.post('/setStatusOfAssignment', [
                 studentId: (req.student.studentId).toString()
             }
         });
+
+        console.log("rapport: ", rapport);
 
         // if the rapport exists, update it
         if (rapport.length > 0) {
@@ -254,8 +269,7 @@ router.post('/addDeelOpdracht', [
     console.log("Post / addDeelOpdracht");
     try {
         // add 10min to the time
-        const tijd = new Date();
-        tijd.setMinutes(tijd.getMinutes() + req.body.tijd);
+        const tijd = addMinutes(new Date(), req.body.tijd);
         const deelOpdracht = await prisma.opdrachtElement.create({
             data: {
                 id: crypto.randomUUID(),
@@ -401,20 +415,15 @@ router.get('/getstatusOfEveryoneInOpdrachtElement/:opdrachtElementId',
                 ))
             );
 
-            const aantalRapporten = rapporten.filter(rapport => rapport.status === 1).length;
-            const aantalRapporten2 = rapporten.filter(rapport => rapport.status === 2).length;
-            const aantalRapporten3 = rapporten.filter(rapport => rapport.status === 3).length;
+            const buzy = rapporten.filter(rapport => rapport.status === 1).length;
+            const done = rapporten.filter(rapport => rapport.status === 2).length;
+            const stopped = rapporten.filter(rapport => rapport.status === 3).length;
 
             const total = rapporten.length;
-
-            console.log("rapporten", rapporten);
-            console.log("aantalRapporten: ", aantalRapporten);
-            console.log("aantalRapporten2: ", aantalRapporten2);
-            console.log("aantalRapporten3: ", aantalRapporten3);
             res.status(200).json({
-                aantalRapporten,
-                aantalRapporten2,
-                aantalRapporten3,
+                done,
+                buzy,
+                stopped,
                 total
             });
 
@@ -423,6 +432,70 @@ router.get('/getstatusOfEveryoneInOpdrachtElement/:opdrachtElementId',
             res.status(500).json({ error: error.message });
         }
     });
+
+// addTimeToOpdrachtElement {opdrachtElementId, time} post
+router.post('/addTimeToOpdrachtElement', [
+    check('opdrachtElementId').not().isEmpty().withMessage('Opdracht element id is required'),
+    check('time').not().isEmpty().withMessage('Time is required')
+], async (req, res) => {
+    console.log("Post / addTimeToOpdrachtElement");
+    try {
+        console.log("opdrachtElementId: ", req.body.opdrachtElementId);
+        console.log("time: ", req.body.time);
+        const opdrachtElement = await prisma.opdrachtElement.findUnique({
+            where: {
+                id: req.body.opdrachtElementId
+            }
+        });
+
+        if (opdrachtElement) {
+            const updatedOpdrachtElement = await prisma.opdrachtElement.update({
+                where: { id: opdrachtElement.id },
+                data: {
+                    // + time in minutes
+                    minuten: addMinutes(opdrachtElement.minuten, req.body.time)
+                }
+            });
+            console.log("updatedOpdrachtElement: ", updatedOpdrachtElement);
+            res.status(200).json(updatedOpdrachtElement);
+        } else {
+            console.log("Opdracht element not found");
+            res.status(500).json({ error: "Opdracht element not found" });
+        }
+    } catch (error) {
+        console.log("error: ", error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// getAllRapportenOfOpdrachtElement {opdrachtElementId} post
+router.post('/getAllRapportenOfOpdrachtElement', [
+    check('opdrachtElementId').not().isEmpty().withMessage('Opdracht element id is required')
+], async (req, res) => {
+    console.log("Post / getAllRapportenOfOpdrachtElement");
+    try {
+        console.log("opdrachtElementId: ", req.body.opdrachtElementId);
+        const rapporten = await prisma.rapport.findMany({
+            where: {
+                OpdrachtElementId: req.body.opdrachtElementId,
+                geldig: 1
+            }
+        });
+
+        const extraMinuten1 = rapporten.filter(rapport => rapport.extraMinuten === 1).length;
+        const extraMinuten5 = rapporten.filter(rapport => rapport.extraMinuten === 5).length;
+        const extraMinuten10 = rapporten.filter(rapport => rapport.extraMinuten === 10).length;
+
+        res.status(200).json({
+            extraMinuten1,
+            extraMinuten5,
+            extraMinuten10
+        });
+    } catch (error) {
+        console.log("error: ", error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
 
 
 //exporteren van het router object
