@@ -317,7 +317,6 @@ router.post('/searchGroepByName', [
             where: {
                 studentId: userId,
                 geldig: 1,
-
             },
         });
 

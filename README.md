@@ -11,6 +11,12 @@ yarn install
 ```bash
 yarn start
 ```
+
+#### test the application (cypress)
+```bash
+yarn cypress:open
+```
+
 ---
 
 ### the express server
